@@ -14,13 +14,23 @@ let posts = [
 
 // get all post
 app.get('/api/posts',(req,res) => {
-    res.json(posts)
+    console.log(req.query);
+    const limit = parseInt(req.query.limit)
+    
+    if(!isNaN(limit) && limit > 0){
+        res.status(200).json(posts.slice(0,limit))    
+        res.status(200).json(posts)
+    } else {
+        res.status(200).json(posts)
+    }
+
+    
 })
 
 // get single post
 app.get('/api/posts/:id',(req,res) => {
     const id = parseInt(req.params.id)
-    res.json(posts.filter((post) => post.id === id))
+    res.status(200).json(posts.filter((post) => post.id === id))
 })
 
 app.listen(port, () => {
