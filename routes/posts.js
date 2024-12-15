@@ -8,16 +8,23 @@ let posts = [
     {id: 3, title:'Post three'}
 ]
 
+//logger
+const logger = (req,res,next) => {
+    console.log(`${req.method} ${req.protocol}://${req.get('host')}${req.originalUrl}`);
+    next()
+}
+
+
 // get all post
-router.get('/',(req,res) => {
+router.get('/',logger,(req,res) => {
     console.log(req.query);
     const limit = parseInt(req.query.limit)
-    
     if(!isNaN(limit) && limit > 0){
        return res.status(200).json(posts.slice(0,limit))    
     } 
      res.status(200).json(posts)
 })
+
 
 // get single post
 router.get('/:id',(req,res) => {
@@ -30,8 +37,8 @@ router.get('/:id',(req,res) => {
     res.status(200).json(post)
 })
 
-// post request
 
+// post request
 router.post('/',(req,res) => {
     console.log(req.body);
     const newPost = {
@@ -42,9 +49,9 @@ router.post('/',(req,res) => {
         return res.status(400).json({msg: `Please include a title`})
     }
     posts.push(newPost)
-    res.status(201).json(posts)
-    
+    res.status(201).json(posts)    
 })
+
 
 // put request update post
 router.put('/:id',(req,res) => {
@@ -56,6 +63,7 @@ router.put('/:id',(req,res) => {
     post.title = req.body.title
     res.status(200).json(posts)
 })
+
 
 // delete request
 router.delete('/:id',(req,res) => {
